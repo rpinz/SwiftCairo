@@ -11,36 +11,36 @@ import GLibObject
 
 #if CAIRO_CONSTANTS_MISSING
 public extension cairo_font_slant_t {
-    public static var normal: cairo_font_slant_t = CAIRO_FONT_SLANT_NORMAL
-    public static var italic: cairo_font_slant_t = CAIRO_FONT_SLANT_ITALIC
-    public static var oblique: cairo_font_slant_t = CAIRO_FONT_SLANT_OBLIQUE
+    static var normal: cairo_font_slant_t = CAIRO_FONT_SLANT_NORMAL
+    static var italic: cairo_font_slant_t = CAIRO_FONT_SLANT_ITALIC
+    static var oblique: cairo_font_slant_t = CAIRO_FONT_SLANT_OBLIQUE
 }
 
 public extension cairo_font_weight_t {
-    public static var normal: cairo_font_weight_t = CAIRO_FONT_WEIGHT_NORMAL
-    public static var bold: cairo_font_weight_t = CAIRO_FONT_WEIGHT_BOLD
+    static var normal: cairo_font_weight_t = CAIRO_FONT_WEIGHT_NORMAL
+    static var bold: cairo_font_weight_t = CAIRO_FONT_WEIGHT_BOLD
 }
 
 public extension cairo_subpixel_order_t {
-    public static var defaultOrder: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_DEFAULT
-    public static var rgb: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_RGB
-    public static var bgr: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_BGR
-    public static var vrgb: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_VRGB
-    public static var vbgr: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_VBGR
+    static var defaultOrder: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_DEFAULT
+    static var rgb: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_RGB
+    static var bgr: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_BGR
+    static var vrgb: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_VRGB
+    static var vbgr: cairo_subpixel_order_t = CAIRO_SUBPIXEL_ORDER_VBGR
 }
 
 public extension cairo_hint_style_t {
-    public static var defaultStyle: cairo_hint_style_t = CAIRO_HINT_STYLE_DEFAULT
-    public static var none: cairo_hint_style_t = CAIRO_HINT_STYLE_NONE
-    public static var slight: cairo_hint_style_t = CAIRO_HINT_STYLE_SLIGHT
-    public static var medium: cairo_hint_style_t = CAIRO_HINT_STYLE_MEDIUM
-    public static var full: cairo_hint_style_t = CAIRO_HINT_STYLE_FULL
+    static var defaultStyle: cairo_hint_style_t = CAIRO_HINT_STYLE_DEFAULT
+    static var none: cairo_hint_style_t = CAIRO_HINT_STYLE_NONE
+    static var slight: cairo_hint_style_t = CAIRO_HINT_STYLE_SLIGHT
+    static var medium: cairo_hint_style_t = CAIRO_HINT_STYLE_MEDIUM
+    static var full: cairo_hint_style_t = CAIRO_HINT_STYLE_FULL
 }
 
 public extension cairo_hint_metrics_t {
-    public static var defaultMetrics: cairo_hint_metrics_t = CAIRO_HINT_METRICS_DEFAULT
-    public static var off: cairo_hint_metrics_t = CAIRO_HINT_METRICS_OFF
-    public static var on: cairo_hint_metrics_t = CAIRO_HINT_METRICS_ON
+    static var defaultMetrics: cairo_hint_metrics_t = CAIRO_HINT_METRICS_DEFAULT
+    static var off: cairo_hint_metrics_t = CAIRO_HINT_METRICS_OFF
+    static var on: cairo_hint_metrics_t = CAIRO_HINT_METRICS_ON
 }
 #endif
 
@@ -88,7 +88,7 @@ public extension ContextProtocol {
     ///
     /// This function is equivalent to a call to cairo_toy_font_face_create()
     /// followed by cairo_set_font_face().
-    public func selectFontFace(_ family: UnsafePointer<CChar>, slant: cairo_font_slant_t, weight: cairo_font_weight_t) {
+    func selectFontFace(_ family: UnsafePointer<CChar>, slant: cairo_font_slant_t, weight: cairo_font_weight_t) {
         cairo_select_font_face(ptr, family, slant, weight)
     }
 
@@ -101,7 +101,7 @@ public extension ContextProtocol {
     /// If text is drawn without setting the font size, (nor
     /// the font matrix nor setScaledFont()), the default
     /// font size is 10.0.
-    public var fontSize: Double {
+    var fontSize: Double {
         get {
             let m = fontMatrix
             let size = (m.xx + m.yx + m.xy + m.yy) / 2
@@ -116,7 +116,7 @@ public extension ContextProtocol {
     /// simple scale is used (see cairo_set_font_size()), but a more
     /// complex font matrix can be used to shear the font
     /// or stretch it unequally along the two axes.
-    public var fontMatrix: cairo_matrix_t {
+    var fontMatrix: cairo_matrix_t {
         get {
             var m = cairo_matrix_t(xx: 0, yx: 0, xy: 0, yy: 0, x0: 0, y0: 0)
             cairo_get_font_matrix(ptr, &m)
@@ -133,7 +133,7 @@ public extension ContextProtocol {
     /// options derived from underlying surface; if the value in @options
     /// has a default value (like %CAIRO_ANTIALIAS_DEFAULT), then the value
     /// from the surface is used.
-    public func setFont(options: UnsafePointer<cairo_font_options_t>) {
+    func setFont(options: UnsafePointer<cairo_font_options_t>) {
         cairo_set_font_options(ptr, options)
     }
 
@@ -143,7 +143,7 @@ public extension ContextProtocol {
     /// passed to cairo_set_font_options().
     /// - Parameters:
     ///   - options: a #cairo_font_options_t pointer into which to store the retrieved options. All existing values are overwritten
-    public func getFont(options: UnsafeMutablePointer<cairo_font_options_t>) {
+    func getFont(options: UnsafeMutablePointer<cairo_font_options_t>) {
         cairo_get_font_options(ptr, options)
     }
 
@@ -159,7 +159,7 @@ public extension ContextProtocol {
     /// objects it is passed to, (for example, calling
     /// cairo_set_font_face() with a nil font will trigger an error that
     /// will shutdown the #cairo_t object).
-    public var fontFace: UnsafeMutablePointer<cairo_font_face_t> {
+    var fontFace: UnsafeMutablePointer<cairo_font_face_t> {
         get { return cairo_get_font_face(ptr) }
         set { cairo_set_font_face(ptr, newValue) }
     }
@@ -176,7 +176,7 @@ public extension ContextProtocol {
     /// objects it is passed to, (for example, setting
     /// scaledFont with a nil font will trigger an error that
     /// will shutdown the #cairo_t object).
-    public var scaledFont: ScaledFont {
+    var scaledFont: ScaledFont {
         get { return ScaledFont(cairo_get_scaled_font(ptr)) }
         set { cairo_set_scaled_font(ptr, newValue.ptr) }
     }
@@ -202,7 +202,7 @@ public extension ContextProtocol {
     /// and simple programs, but it is not expected to be adequate for
     /// serious text-using applications. See cairo_show_glyphs() for the
     /// "real" text display API in cairo.
-    public func showText(_ text: UnsafePointer<CChar>) {
+    func showText(_ text: UnsafePointer<CChar>) {
         cairo_show_text(ptr, text)
     }
 
@@ -226,7 +226,7 @@ public extension ContextProtocol {
     /// following clusters move backward.
     ///
     /// See #cairo_text_cluster_t for constraints on valid clusters.
-    public func showText(_ text: UnsafePointer<CChar>, length: Int, glyphs: [cairo_glyph_t], clusters: [cairo_text_cluster_t], flags: cairo_text_cluster_flags_t) {
+    func showText(_ text: UnsafePointer<CChar>, length: Int, glyphs: [cairo_glyph_t], clusters: [cairo_text_cluster_t], flags: cairo_text_cluster_flags_t) {
         cairo_show_text_glyphs(ptr, text, Int32(length), glyphs, Int32(glyphs.count), clusters, Int32(clusters.count), flags)
     }
 
@@ -242,7 +242,7 @@ public extension ContextProtocol {
     /// characters. In particular, trailing whitespace characters are
     /// likely to not affect the size of the rectangle, though they will
     /// affect the x_advance and y_advance values.
-    public func textExtents(_ text: UnsafePointer<CChar>) -> cairo_text_extents_t {
+    func textExtents(_ text: UnsafePointer<CChar>) -> cairo_text_extents_t {
         var e = cairo_text_extents_t(x_bearing: 0, y_bearing: 0, width: 0, height: 0, x_advance: 0, y_advance: 0)
         cairo_text_extents(ptr, text, &e)
         return e
@@ -257,14 +257,14 @@ public extension ContextProtocol {
     ///
     /// Note that whitespace glyphs do not contribute to the size of the
     /// rectangle (extents.width and extents.height).
-    public func glyphExtents(_ glyphs: [cairo_glyph_t]) -> cairo_text_extents_t {
+    func glyphExtents(_ glyphs: [cairo_glyph_t]) -> cairo_text_extents_t {
         var e = cairo_text_extents_t(x_bearing: 0, y_bearing: 0, width: 0, height: 0, x_advance: 0, y_advance: 0)
         cairo_glyph_extents(ptr, glyphs, Int32(glyphs.count), &e)
         return e
     }
 
     /// Font extents for the currently selected font
-    public var fontExtents: cairo_font_extents_t {
+    var fontExtents: cairo_font_extents_t {
         var e = cairo_font_extents_t(ascent: 0, descent: 0, height: 0, max_x_advance: 0, max_y_advance: 0)
         cairo_font_extents(ptr, &e)
         return e
